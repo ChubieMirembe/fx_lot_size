@@ -1,6 +1,13 @@
 '''
 Simple program to calculate lot size in forex
 '''
+
+ex_list = ['EURUSD', 'CHFJPY', 'EURJPY', 'NZDJPY', 'AUDUSD', 'CADJPY',
+       'AUDJPY', 'NZDUSD', 'GBPUSD', 'GBPJPY', 'AUDNZD', 'AUDCAD',
+       'AUDCHF', 'GBPCHF', 'GBPCAD', 'USDJPY', 'GBPNZD', 'EURCHF',
+       'NZDCHF', 'CADCHF', 'NZDCAD', 'EURCAD', 'EURNZD', 'GBPAUD',
+       'EURGBP', 'EURAUD', 'USDCAD', 'USDCHF']
+
 pair_list = ['X', 'GBP', 'USD', 'JPY', 'EUR', 'CAD', 'AUD']
 
 def basec():
@@ -23,6 +30,12 @@ def counterc():
     as the counter currency of the pair
     '''
     global pip_value
+
+    for i in ex_list:
+        if str(account_currency) in str(i) and str(pair[3:6]) in str(i):
+            calc_pair = i
+            continue
+
     units = round((pip_value/multiplier), 0)
     lot_size = round((units/100000), 2)
 
