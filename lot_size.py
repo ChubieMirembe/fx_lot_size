@@ -30,12 +30,6 @@ def counterc():
     as the counter currency of the pair
     '''
     global pip_value
-
-    for i in ex_list:
-        if str(account_currency) in str(i) and str(pair[3:6]) in str(i):
-            calc_pair = i
-            continue
-
     units = round((pip_value/multiplier), 0)
     lot_size = round((units/100000), 2)
 
@@ -48,7 +42,13 @@ def neitherc():
     as the base/counter currency of the pair
     '''
     global pip_value
-    ex_rate = float(input("Enter the exchange rate of your account to the counter currency: \n"))
+    
+    for i in ex_list:
+        if str(account_currency) in str(i) and str(pair[3:6]) in str(i):
+            calc_pair = i
+            continue
+    
+    ex_rate = float(input(f"Enter the current price of {calc_pair}: \n"))
     pip_value = pip_value*ex_rate
     units = round((pip_value/multiplier), 0)
     lot_size = round((units/100000), 2)
