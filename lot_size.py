@@ -3,12 +3,24 @@ Simple program to calculate lot size in forex
 '''
 
 ex_list = ['EURUSD', 'CHFJPY', 'EURJPY', 'NZDJPY', 'AUDUSD', 'CADJPY',
-       'AUDJPY', 'NZDUSD', 'GBPUSD', 'GBPJPY', 'AUDNZD', 'AUDCAD',
-       'AUDCHF', 'GBPCHF', 'GBPCAD', 'USDJPY', 'GBPNZD', 'EURCHF',
-       'NZDCHF', 'CADCHF', 'NZDCAD', 'EURCAD', 'EURNZD', 'GBPAUD',
-       'EURGBP', 'EURAUD', 'USDCAD', 'USDCHF']
+           'AUDJPY', 'NZDUSD', 'GBPUSD', 'GBPJPY', 'AUDNZD', 'AUDCAD',
+           'AUDCHF', 'GBPCHF', 'GBPCAD', 'USDJPY', 'GBPNZD', 'EURCHF',
+           'NZDCHF', 'CADCHF', 'NZDCAD', 'EURCAD', 'EURNZD', 'GBPAUD',
+           'EURGBP', 'EURAUD', 'USDCAD', 'USDCHF']
 
 pair_list = ['X', 'GBP', 'USD', 'JPY', 'EUR', 'CAD', 'AUD']
+
+def current_rate(x):
+    import requests
+    import bs4
+    
+    url = ("https://uk.finance.yahoo.com/quote/") + x + ("=X?p=") + x + ("=X")
+    res = requests.get(url)
+    last_p = bs4.BeautifulSoup(res.text, "lxml")
+    last_p = last_p.find('div', {'class': 'My(6px) Pos(r) smartphone_Mt(6px)'})
+    last_p = last_p.find('span').text
+
+    return float(last_p)
 
 def basec():
     '''
@@ -42,14 +54,15 @@ def neitherc():
     as the base/counter currency of the pair
     '''
     global pip_value
-    
+
     for i in ex_list:
         if str(account_currency) in str(i) and str(pair[3:6]) in str(i):
             calc_pair = i
             continue
-    
-    ex_rate = float(input(f"Enter the current price of {calc_pair}: \n"))
-    pip_value = pip_value*ex_rate
+
+    #ex_rate = float(input(f"Enter the current price of {calc_pair}: \n"))
+    pip_value = pip_value*current_rate(calc_pair)
+    #pip_value = pip_value*ex_rate
     units = round((pip_value/multiplier), 0)
     lot_size = round((units/100000), 2)
 
